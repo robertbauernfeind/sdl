@@ -74,6 +74,14 @@ int main() {
         50
     };
 
+    MovingPoint test3{
+        Vec2D{200, 300},
+        Vec2D{0.0f, 10.0f},
+        SDL_Color{0, 0, 255, 255},
+        50,
+        50
+    };
+
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Starting main loop");
     while (!done) {
         SDL_Event event;
@@ -128,7 +136,11 @@ int main() {
         test2.draw();
         test2.update(deltaTime, true);
 
+        test3.draw();
+        test3.update(deltaTime, true);
+
         test.handlePointCollision(test2);
+        test.handlePointCollision(test3);
 
         SDL_RenderPresent(gState.renderer);
     }

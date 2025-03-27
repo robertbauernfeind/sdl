@@ -51,4 +51,18 @@ void MovingPoint::handleBoundaryCollision() {
 void MovingPoint::handlePointCollision(MovingPoint &other) {
     const auto delta = this->position - other.position;
 
+    float xDiff = abs(delta.getX());
+    float yDiff = abs(delta.getY());
+    float minDistanceX = (this->width / 2) + (other.width / 2);
+    float minDistanceY = (this->height / 2) + (other.height / 2);
+
+    if (xDiff < minDistanceX) {
+        velocity = Vec2D{-velocity.getX(), velocity.getY()};
+        other.velocity = Vec2D{-other.velocity.getX(), other.velocity.getY()};
+    }
+
+    if (yDiff < minDistanceY) {
+        velocity = Vec2D{velocity.getX(), -velocity.getY()};
+        other.velocity = Vec2D{other.velocity.getX(), -other.velocity.getY()};
+    }
 }
