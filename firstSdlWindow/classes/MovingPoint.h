@@ -24,6 +24,8 @@ public:
     void draw() const;
 
     void update(float deltaTime);
+
+    bool checkBoundaryCollision();
 };
 
 
