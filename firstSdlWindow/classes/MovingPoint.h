@@ -14,21 +14,29 @@ private:
     Vec2D position;
     Vec2D velocity;
     SDL_Color color;
-    float radius;
     float width = 25;
     float height = 25;
 
 public:
-    MovingPoint(const Vec2D &position, const Vec2D &velocity, const SDL_Color &color, float radius)
-        : position(position), velocity(velocity), color(color), radius(radius) {
+    MovingPoint(const Vec2D &position, const Vec2D &velocity, const SDL_Color &color)
+        : position(position), velocity(velocity), color(color) {
     }
+
+    MovingPoint(const Vec2D &position, const Vec2D &velocity, const SDL_Color &color, float width,
+                float height)
+        : position(position), velocity(velocity), color(color), width(width), height(height) {
+    }
+
+    float getTranslatedX() const;
+    float getTranslatedY() const;
 
     void draw() const;
 
     void update(float deltaTime, bool collision = false);
 
     void handleBoundaryCollision();
-    void handlePointCollision(const MovingPoint &other);
+
+    void handlePointCollision(MovingPoint &other);
 };
 
 

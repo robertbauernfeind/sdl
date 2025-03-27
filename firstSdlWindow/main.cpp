@@ -53,11 +53,26 @@ int main() {
                 static_cast<Uint8>(distrColor(gen)),
                 static_cast<Uint8>(distrColor(gen)),
                 255
-            },
-            10.0f
+            }
         };
         points.push_back(point);
     }
+
+    MovingPoint test{
+        Vec2D{200, 400},
+        Vec2D{0.0f, 0.0f},
+        SDL_Color{255, 0, 0, 255},
+        100,
+        100
+    };
+
+    MovingPoint test2{
+        Vec2D{300, 400},
+        Vec2D{-5.0f, 0.0f},
+        SDL_Color{0, 255, 0, 255},
+        50,
+        50
+    };
 
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Starting main loop");
     while (!done) {
@@ -96,15 +111,25 @@ int main() {
         // }
 
 
-        for (auto &point: points) {
-            point.update(deltaTime);
+        // for (auto &point: points) {
+        //     point.update(deltaTime);
+        //
+        //     for (auto& p1: points) {
+        //         point.handlePointCollision(p1);
+        //     }
+        //
+        //     point.draw();
+        // }
 
-            for (auto& p1: points) {
-                point.handlePointCollision(p1);
-            }
 
-            point.draw();
-        }
+        test.draw();
+        test.update(deltaTime, true);
+
+        test2.draw();
+        test2.update(deltaTime, true);
+
+        test.handlePointCollision(test2);
+
         SDL_RenderPresent(gState.renderer);
     }
 

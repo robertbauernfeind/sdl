@@ -5,11 +5,30 @@
 #include "MovingPoint.h"
 #include "GlobalState.h"
 
+float MovingPoint::getTranslatedX() const {
+    return position.getX() - (width / 2);
+}
+
+float MovingPoint::getTranslatedY() const {
+    return position.getY() - (height / 2);
+}
+
+
 void MovingPoint::draw() const {
     SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
-    const SDL_FRect rectangle{position.getX() - (width / 2) , position.getY() + (height / 2), width, height};
+    const SDL_FRect rectangle{getTranslatedX(), getTranslatedY(), width, height};
 
     SDL_RenderFillRect(gState.renderer, &rectangle);
+
+    SDL_SetRenderDrawColor(gState.renderer, 0, 0, 255, 0);
+
+    const SDL_FRect middle{
+        position.getX() - (width / 100 * 20) / 2,
+        position.getY() - (height / 100 * 20) / 2,
+        width / 100 * 20,
+        height / 100 * 20
+    };
+    SDL_RenderFillRect(gState.renderer, &middle);
 }
 
 void MovingPoint::update(const float deltaTime, bool collision) {
@@ -29,8 +48,7 @@ void MovingPoint::handleBoundaryCollision() {
     }
 }
 
-void MovingPoint::handlePointCollision(const MovingPoint &other) {
-    if (other.position.getX() - position.getX() < 25 && other.position.getY() - position.getY() < 25) {
-        velocity = Vec2D{-velocity.getX(), -velocity.getY()};
-    }
+void MovingPoint::handlePointCollision(MovingPoint &other) {
+    const auto delta = this->position - other.position;
+
 }
