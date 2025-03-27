@@ -95,8 +95,14 @@ int main() {
         //     SDL_RenderPoint(renderer, SDL_randf() * 200.0f + 300.0f, SDL_randf() * 150.0f+ 225.0f);
         // }
 
+
         for (auto &point: points) {
             point.update(deltaTime);
+
+            for (auto& p1: points) {
+                point.handlePointCollision(p1);
+            }
+
             point.draw();
         }
         SDL_RenderPresent(gState.renderer);

@@ -15,6 +15,8 @@ private:
     Vec2D velocity;
     SDL_Color color;
     float radius;
+    float width = 25;
+    float height = 25;
 
 public:
     MovingPoint(const Vec2D &position, const Vec2D &velocity, const SDL_Color &color, float radius)
@@ -23,9 +25,10 @@ public:
 
     void draw() const;
 
-    void update(float deltaTime);
+    void update(float deltaTime, bool collision = false);
 
-    bool checkBoundaryCollision();
+    void handleBoundaryCollision();
+    void handlePointCollision(const MovingPoint &other);
 };
 
 
