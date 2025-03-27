@@ -10,10 +10,17 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
 # This assumes the SDL source is available in vendored/SDL
-add_subdirectory(vendor/SDL EXCLUDE_FROM_ALL)
+add_subdirectory(vendor/SDL3 EXCLUDE_FROM_ALL)
 
 # Create your game executable target as usual
-add_executable(firstSdlWindow main.cpp)
+add_executable(firstSdlWindow main.cpp
+        classes/Vec2D.cpp
+        classes/Vec2D.h
+        classes/MovingPoint.cpp
+        classes/MovingPoint.h
+        classes/GlobalState.cpp
+        classes/GlobalState.h
+)
 
 # Link to the actual SDL3 library.
 target_link_libraries(firstSdlWindow PRIVATE SDL3::SDL3)
