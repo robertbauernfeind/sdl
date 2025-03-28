@@ -15,7 +15,7 @@ private:
     float y = 0;
 
 public:
-    // Vec2D(): x(0), y(0) {}
+    Vec2D(): x(0), y(0) {}
     Vec2D(const float x, const float y): x(x), y(y) {
     }
 

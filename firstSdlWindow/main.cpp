@@ -43,8 +43,10 @@ int main() {
     mt19937 gen(rd());
     uniform_real_distribution<float> distrVel{-100, 100};
     uniform_real_distribution<float> distrColor{0, 255};
+    uniform_real_distribution<float> distrSize{0, 100};
 
-    for (int i = 0; i < 200; i++) {
+    for (int i = 0; i < 10; i++) {
+        const float size(distrSize(gen));
         MovingPoint point{
             Vec2D{SDL_randf() * static_cast<float>(gState.width), SDL_randf() * static_cast<float>(gState.height)},
             Vec2D{distrVel(gen), distrVel(gen)},
@@ -53,34 +55,39 @@ int main() {
                 static_cast<Uint8>(distrColor(gen)),
                 static_cast<Uint8>(distrColor(gen)),
                 255
-            }
+            },
+            size,
+            size
         };
         points.push_back(point);
     }
 
-    MovingPoint test{
-        Vec2D{200, 400},
-        Vec2D{0.0f, 0.0f},
-        SDL_Color{255, 0, 0, 255},
-        100,
-        100
-    };
-
-    MovingPoint test2{
-        Vec2D{300, 400},
-        Vec2D{-5.0f, 0.0f},
-        SDL_Color{0, 255, 0, 255},
-        50,
-        50
-    };
-
-    MovingPoint test3{
-        Vec2D{200, 300},
-        Vec2D{0.0f, 10.0f},
-        SDL_Color{0, 0, 255, 255},
-        50,
-        50
-    };
+    // Red
+    // points.emplace_back(
+    //     Vec2D{200, 400},
+    //     Vec2D{-5.0f, -5.0f},
+    //     SDL_Color{255, 0, 0, 255},
+    //     100,
+    //     100
+    // );
+    //
+    // // Green
+    // points.emplace_back(
+    //     Vec2D{300, 400},
+    //     Vec2D{-10.0f, 0.0f},
+    //     SDL_Color{0, 255, 0, 255},
+    //     50,
+    //     50
+    // );
+    //
+    // // Blue
+    // points.emplace_back(
+    //     Vec2D{200, 300},
+    //     Vec2D{0.0f, 8.0f},
+    //     SDL_Color{0, 0, 255, 255},
+    //     50,
+    //     50
+    // );
 
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Starting main loop");
     while (!done) {
@@ -94,6 +101,7 @@ int main() {
                     break;
             }
         }
+        // do logic here
 
         Uint64 currentTime = SDL_GetTicks();
         float deltaTime = (currentTime - lastTime) / 1000.0f;
@@ -101,46 +109,16 @@ int main() {
 
         SDL_SetRenderDrawColor(gState.renderer, 0, 0, 0, 255);
         SDL_RenderClear(gState.renderer);
-        // do logic here
-        // Clear screen with black
-        //
-        // // Draw red rectangle
-        // SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        // SDL_FRect rect = {300.0f, 225.0f, 200.0f, 150.0f}; // x, y, width, height
-        // SDL_RenderFillRect(renderer, &rect);
 
-        // Draw Lines
-        // SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
-        // SDL_RenderLine(renderer, 0, 0, 800, 600);
-        // SDL_RenderLine(renderer, 0, 600, 800, 0);
-        // SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-        // for (int i = 0; i < 500; i++) {
-        //     SDL_RenderPoint(renderer, SDL_randf() * 200.0f + 300.0f, SDL_randf() * 150.0f+ 225.0f);
-        // }
+        for (auto &point: points) {
+            point.update(deltaTime, true);
 
+            // for (auto &p1: points) {
+            //     point.handlePointCollision(p1);
+            // }
 
-        // for (auto &point: points) {
-        //     point.update(deltaTime);
-        //
-        //     for (auto& p1: points) {
-        //         point.handlePointCollision(p1);
-        //     }
-        //
-        //     point.draw();
-        // }
-
-
-        test.draw();
-        test.update(deltaTime, true);
-
-        test2.draw();
-        test2.update(deltaTime, true);
-
-        test3.draw();
-        test3.update(deltaTime, true);
-
-        test.handlePointCollision(test2);
-        test.handlePointCollision(test3);
+            point.draw();
+        }
 
         SDL_RenderPresent(gState.renderer);
     }
