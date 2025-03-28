@@ -26,6 +26,18 @@ Vec2D Vec2D::operator*(float scalar) const {
     return Vec2D{x * scalar, y * scalar};
 }
 
+Vec2D &Vec2D::operator+=(const Vec2D &other) {
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+Vec2D &Vec2D::operator-=(const Vec2D &other) {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
 float Vec2D::length() const {
     return sqrt(x * x + y * y);
 }
@@ -33,4 +45,8 @@ float Vec2D::length() const {
 Vec2D Vec2D::normalize() const {
     float l = length();
     return Vec2D{x / l, y / l};
+}
+
+float Vec2D::dot(const Vec2D &other) const {
+    return x * other.x + y * other.y;
 }
