@@ -5,6 +5,7 @@
 #ifndef MOVINGPOINT_H
 #define MOVINGPOINT_H
 #include <SDL3/SDL_pixels.h>
+#include <SDL3/SDL_rect.h>
 
 #include "Vec2D.h"
 
@@ -17,6 +18,10 @@ private:
     float width = 25;
     float height = 25;
 
+    SDL_FRect getRect() const {
+        return SDL_FRect{getTranslatedX(), getTranslatedY(), width, height};
+    }
+
 public:
     MovingPoint(const Vec2D &position, const Vec2D &velocity, const SDL_Color &color)
         : position(position), velocity(velocity), color(color) {
@@ -28,6 +33,7 @@ public:
     }
 
     float getTranslatedX() const;
+
     float getTranslatedY() const;
 
     void draw() const;
@@ -37,6 +43,8 @@ public:
     void handleBoundaryCollision();
 
     void handlePointCollision(MovingPoint &other);
+
+    bool isColliding(MovingPoint &other) const;
 };
 
 

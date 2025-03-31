@@ -22,7 +22,11 @@ public:
 
     float getX() const;
 
+    void setX(float x);
+
     float getY() const;
+
+    void setY(float y);
 
     Vec2D operator+(const Vec2D &other) const;
 

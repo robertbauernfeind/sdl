@@ -39,30 +39,51 @@ void MovingPoint::update(const float deltaTime, bool collision) {
 }
 
 void MovingPoint::handleBoundaryCollision() {
-    if (position.getX() < 0 || position.getX() > static_cast<float>(gState.width)) {
+    if ((getTranslatedX() < 0) || ((getTranslatedX() + width) > static_cast<float>(gState.width))) {
         velocity = Vec2D{-velocity.getX(), velocity.getY()};
     }
 
-    if (position.getY() < 0 || position.getY() > static_cast<float>(gState.height)) {
+    if ((getTranslatedY()) < 0 || ((getTranslatedY() + height) > static_cast<float>(gState.height))) {
         velocity = Vec2D{velocity.getX(), -velocity.getY()};
     }
 }
 
+bool MovingPoint::isColliding(MovingPoint &other) const {
+    SDL_FRect thisRect = this->getRect();
+    SDL_FRect otherRect = other.getRect();
+
+    const bool colliding = SDL_HasRectIntersectionFloat(
+        &thisRect, &otherRect
+    );
+
+    return colliding;
+}
+
 void MovingPoint::handlePointCollision(MovingPoint &other) {
-    const auto delta = this->position - other.position;
+    if (!isColliding(other)) return;
 
-    float xDiff = abs(delta.getX());
-    float yDiff = abs(delta.getY());
-    float minDistanceX = (this->width / 2) + (other.width / 2);
-    float minDistanceY = (this->height / 2) + (other.height / 2);
+    Vec2D collisionNormal = this->position - other.position;
 
-    if (xDiff < minDistanceX) {
-        velocity = Vec2D{-velocity.getX(), velocity.getY()};
-        other.velocity = Vec2D{-other.velocity.getX(), other.velocity.getY()};
+    if (collisionNormal.length() == 0) {
+        collisionNormal = Vec2D(1.0f, 0.0f); // Setze eine Standardrichtung
+    } else {
+        collisionNormal = collisionNormal.normalize();
     }
 
-    if (yDiff < minDistanceY) {
-        velocity = Vec2D{velocity.getX(), -velocity.getY()};
-        other.velocity = Vec2D{other.velocity.getX(), -other.velocity.getY()};
-    }
+    Vec2D relativeVelocity = this->velocity - other.velocity;
+
+    if (relativeVelocity.dot(collisionNormal) > 0) return;
+
+    float velocityAlongNormal = relativeVelocity.dot(collisionNormal);
+
+    // Restitutionskoeffizient (1.0 = perfekt elastisch, 0.0 = unelastisch)
+    float restitution = 1.0f; // Kann auf 0.8 oder niedriger gesetzt werden für realistischere Kollisionen
+
+    // Impulsberechnung
+    float impulseScalar = (2 * velocityAlongNormal) / 2; // Da Massen gleich sind, einfach geteilt durch 2
+    Vec2D impulse = collisionNormal * impulseScalar * restitution;
+
+    // Neue Geschwindigkeiten setzen
+    this->velocity -= impulse;
+    other.velocity += impulse;
 }

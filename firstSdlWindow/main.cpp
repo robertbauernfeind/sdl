@@ -45,44 +45,44 @@ int main() {
     uniform_real_distribution<float> distrColor{0, 255};
     uniform_real_distribution<float> distrSize{0, 100};
 
-    for (int i = 0; i < 10; i++) {
-        const float size(distrSize(gen));
-        MovingPoint point{
-            Vec2D{SDL_randf() * static_cast<float>(gState.width), SDL_randf() * static_cast<float>(gState.height)},
-            Vec2D{distrVel(gen), distrVel(gen)},
-            SDL_Color{
-                static_cast<Uint8>(distrColor(gen)),
-                static_cast<Uint8>(distrColor(gen)),
-                static_cast<Uint8>(distrColor(gen)),
-                255
-            },
-            size,
-            size
-        };
-        points.push_back(point);
-    }
+    // for (int i = 0; i < 10; i++) {
+    //     const float size(distrSize(gen));
+    //     MovingPoint point{
+    //         Vec2D{SDL_randf() * static_cast<float>(gState.width), SDL_randf() * static_cast<float>(gState.height)},
+    //         Vec2D{distrVel(gen), distrVel(gen)},
+    //         SDL_Color{
+    //             static_cast<Uint8>(distrColor(gen)),
+    //             static_cast<Uint8>(distrColor(gen)),
+    //             static_cast<Uint8>(distrColor(gen)),
+    //             255
+    //         },
+    //         size,
+    //         size
+    //     };
+    //     points.push_back(point);
+    // }
 
-    // Red
+    // // Red
     // points.emplace_back(
     //     Vec2D{200, 400},
-    //     Vec2D{-5.0f, -5.0f},
+    //     Vec2D{0.0, 0.0},
     //     SDL_Color{255, 0, 0, 255},
     //     100,
     //     100
     // );
     //
     // // Green
-    // points.emplace_back(
-    //     Vec2D{300, 400},
-    //     Vec2D{-10.0f, 0.0f},
-    //     SDL_Color{0, 255, 0, 255},
-    //     50,
-    //     50
-    // );
+    points.emplace_back(
+        Vec2D{550, 400},
+        Vec2D{70.0f, 70.0f},
+        SDL_Color{0, 255, 0, 255},
+        50,
+        50
+    );
     //
     // // Blue
     // points.emplace_back(
-    //     Vec2D{200, 300},
+    //     Vec2D{200, 100},
     //     Vec2D{0.0f, 8.0f},
     //     SDL_Color{0, 0, 255, 255},
     //     50,
@@ -113,9 +113,16 @@ int main() {
         for (auto &point: points) {
             point.update(deltaTime, true);
 
-            // for (auto &p1: points) {
-            //     point.handlePointCollision(p1);
-            // }
+            for (auto &p1: points) {
+                if (point.getTranslatedX() == p1.getTranslatedX() && point.getTranslatedY() == p1.getTranslatedY()) {
+                    continue;
+                }
+
+                point.handlePointCollision(p1);
+                // if (point.isColliding(p1)) {
+                //     SDL_Log("Colliding");
+                // }
+            }
 
             point.draw();
         }

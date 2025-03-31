@@ -10,8 +10,16 @@ float Vec2D::getX() const {
     return x;
 }
 
+void Vec2D::setX(float x) {
+    Vec2D::x = x;
+}
+
 float Vec2D::getY() const {
     return y;
+}
+
+void Vec2D::setY(float y) {
+    Vec2D::y = y;
 }
 
 Vec2D Vec2D::operator+(const Vec2D &other) const {
