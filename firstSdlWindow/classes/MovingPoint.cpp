@@ -40,10 +40,12 @@ void MovingPoint::update(const float deltaTime, bool collision) {
 
 void MovingPoint::handleBoundaryCollision() {
     if ((getTranslatedX() < 0) || ((getTranslatedX() + width) > static_cast<float>(gState.width))) {
+        position.setX(getTranslatedX() < 0 ? width / 2 : static_cast<float>(gState.width) - width / 2);
         velocity = Vec2D{-velocity.getX(), velocity.getY()};
     }
 
     if ((getTranslatedY()) < 0 || ((getTranslatedY() + height) > static_cast<float>(gState.height))) {
+        position.setY(getTranslatedY() < 0 ? height / 2 : static_cast<float>(gState.height) - height / 2);
         velocity = Vec2D{velocity.getX(), -velocity.getY()};
     }
 }
