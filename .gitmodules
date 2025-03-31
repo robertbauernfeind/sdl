@@ -1,3 +1,6 @@
 [submodule "firstSdlWindow/vendor/SDL3"]
 	path = firstSdlWindow/vendor/SDL3
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "snake/vendor/SDL3"]
+	path = snake/vendor/SDL3
+	url = https://github.com/libsdl-org/SDL.git
