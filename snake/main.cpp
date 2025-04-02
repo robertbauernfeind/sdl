@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "Head.h"
 #include "SDL3/SDL.h"
 
 using namespace std;
@@ -49,6 +51,9 @@ int main() {
 
     Uint64 lastTime = SDL_GetTicks();
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Starting main loop");
+
+    Head snake = Head();
+
     while (!done) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -60,14 +65,20 @@ int main() {
                     break;
             }
         }
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
         drawGrid();
 
-        SDL_RenderPresent(renderer);
         // do logic here
 
         Uint64 currentTime = SDL_GetTicks();
         float deltaTime = (currentTime - lastTime) / 1000.0f;
         lastTime = currentTime;
+        SDL_Delay(250);
+        snake.draw(renderer);
+        snake.move(1);
+        SDL_RenderPresent(renderer);
     }
 
     SDL_DestroyWindow(window);

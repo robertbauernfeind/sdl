@@ -10,7 +10,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 # This assumes the SDL source is available in vendored/SDL
 add_subdirectory(vendor/SDL3 EXCLUDE_FROM_ALL)
 
-add_executable(snake main.cpp)
+add_executable(snake main.cpp
+        Head.cpp
+        Head.h)
 
 # Link to the actual SDL3 library.
 target_link_libraries(snake PRIVATE SDL3::SDL3)
