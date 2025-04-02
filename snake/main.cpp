@@ -61,6 +61,24 @@ int main() {
                 case SDL_EVENT_QUIT:
                     done = true;
                     break;
+                case SDL_EVENT_KEY_DOWN:
+                    switch (event.key.key) {
+                        case SDLK_UP:
+                            snake.move(0);
+                            break;
+                        case SDLK_DOWN:
+                            snake.move(1);
+                            break;
+                        case SDLK_LEFT:
+                            snake.move(2);
+                            break;
+                        case SDLK_RIGHT:
+                            snake.move(3);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -77,7 +95,6 @@ int main() {
         lastTime = currentTime;
         SDL_Delay(250);
         snake.draw(renderer);
-        snake.move(1);
         SDL_RenderPresent(renderer);
     }
 
