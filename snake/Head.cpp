@@ -7,23 +7,27 @@
 void Head::draw(SDL_Renderer *renderer) const {
     SDL_SetRenderDrawColor(renderer, 255, 50, 50, 255);
 
-    SDL_FRect head = { (float)x, (float)y, 50, 50 };
+    const SDL_FRect head = { (float)x, (float)y, 50, 50 };
     SDL_RenderFillRect(renderer, &head);
 }
 
-void Head::move(int direction) {
-    int step = 50;
+void Head::changeDirection(const Direction dir) {
+    direction = dir;
+}
+
+void Head::move() {
+    const int step = 50;
     switch (direction) {
-        case 0: // up
+        case Direction::UP:
             y -= step;
             break;
-        case 1: // down
+        case Direction::DOWN:
             y += step;
             break;
-        case 2: // left
+        case Direction::LEFT:
             x -= step;
             break;
-        case 3: // right
+        case Direction::RIGHT:
             x += step;
             break;
         default:
