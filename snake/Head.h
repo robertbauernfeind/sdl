@@ -18,6 +18,7 @@ private:
     int x = 300;
     int y = 300;
     Direction direction = Direction::UP;
+    SDL_Color color = { 255, 255, 0, 255 };
 
 public:
     void draw() const;

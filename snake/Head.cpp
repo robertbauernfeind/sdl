@@ -7,7 +7,7 @@
 #include "GlobalState.h"
 
 void Head::draw() const {
-    SDL_SetRenderDrawColor(gState.renderer, 255, 50, 50, 255);
+    SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
 
     const SDL_FRect head = { (float)x, (float)y, 50, 50 };
     SDL_RenderFillRect(gState.renderer, &head);
