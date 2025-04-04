@@ -4,11 +4,13 @@
 
 #include "Head.h"
 
-void Head::draw(SDL_Renderer *renderer) const {
-    SDL_SetRenderDrawColor(renderer, 255, 50, 50, 255);
+#include "GlobalState.h"
+
+void Head::draw() const {
+    SDL_SetRenderDrawColor(gState.renderer, 255, 50, 50, 255);
 
     const SDL_FRect head = { (float)x, (float)y, 50, 50 };
-    SDL_RenderFillRect(renderer, &head);
+    SDL_RenderFillRect(gState.renderer, &head);
 }
 
 void Head::changeDirection(const Direction dir) {

@@ -20,7 +20,7 @@ private:
     Direction direction = Direction::UP;
 
 public:
-    void draw(SDL_Renderer* renderer) const;
+    void draw() const;
     void changeDirection(Direction dir);
     void move();
 };

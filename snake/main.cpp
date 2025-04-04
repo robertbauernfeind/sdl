@@ -2,35 +2,30 @@
 
 #include "Head.h"
 #include "SDL3/SDL.h"
+#include "GlobalState.h"
 
 using namespace std;
 
-int height = 800;
-int width = 800;
-
-SDL_Window *window = nullptr;
-SDL_Renderer *renderer = nullptr;
-
 void drawGrid() {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(gState.renderer, 255, 255, 255, 255);
     constexpr int offsetX = 0;
     const int offsetY = 0;
-    for (int i = (offsetY / 2); i <= height - (offsetY / 2); i += 50) {
+    for (int i = (offsetY / 2); i <= gState.height - (offsetY / 2); i += 50) {
         SDL_RenderLine(
-            renderer,
+            gState.renderer,
             static_cast<float>(i),
             (offsetY / 2.0f),
             static_cast<float>(i),
-            static_cast<float>(height) - (offsetY / 2.0f)
+            static_cast<float>(gState.height) - (offsetY / 2.0f)
         );
     }
 
-    for (int i = (offsetX / 2); i <= width - (offsetX / 2); i += 50) {
+    for (int i = (offsetX / 2); i <= gState.width - (offsetX / 2); i += 50) {
         SDL_RenderLine(
-            renderer,
+            gState.renderer,
             (offsetX / 2.0f),
             static_cast<float>(i),
-            static_cast<float>(width) - (offsetX / 2.0f),
+            static_cast<float>(gState.width) - (offsetX / 2.0f),
             static_cast<float>(i)
         );
     }
@@ -48,14 +43,14 @@ int main() {
 
     if (!SDL_CreateWindowAndRenderer(
         "Snake",
-        width,
-        height,
+        gState.width,
+        gState.height,
         SDL_WINDOW_OPENGL,
-        &window,
-        &renderer
+        &gState.window,
+        &gState.renderer
     ))
 
-        if (window == nullptr) {
+        if (gState.window == nullptr) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window: %s", SDL_GetError());
             return 1;
         }
@@ -64,17 +59,12 @@ int main() {
     Uint64 lastTime = SDL_GetTicks();
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Starting main loop");
     float accumulator = 0.0f;
-    const float fixedTimeStep = 0.5f; // 100ms Update-Intervall
+    const float fixedTimeStep = 0.25f; // 100ms Update-Intervall
 
     auto snake = Head();
 
     while (!done) {
         SDL_Event event;
-        const auto currentTime = SDL_GetTicks();
-        const auto deltaTime = (currentTime - lastTime) / 1000;
-        lastTime = currentTime;
-        accumulator += deltaTime;
-
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_EVENT_QUIT:
@@ -102,9 +92,13 @@ int main() {
                     break;
             }
         }
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(gState.renderer, 0, 0, 0, 255);
+        SDL_RenderClear(gState.renderer);
 
+        Uint64 currentTime = SDL_GetTicks();
+        float deltaTime = (currentTime - lastTime) / 1000.0f;
+        lastTime = currentTime;
+        accumulator += deltaTime;
 
         // do logic here
         drawGrid();
@@ -115,11 +109,11 @@ int main() {
             accumulator -= fixedTimeStep;
         }
 
-        snake.draw(renderer);
-        SDL_RenderPresent(renderer);
+        snake.draw();
+        SDL_RenderPresent(gState.renderer);
     }
 
-    SDL_DestroyWindow(window);
+    SDL_DestroyWindow(gState.window);
     SDL_Quit();
 
     return 0;

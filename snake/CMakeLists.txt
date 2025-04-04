@@ -12,7 +12,9 @@ add_subdirectory(vendor/SDL3 EXCLUDE_FROM_ALL)
 
 add_executable(snake main.cpp
         Head.cpp
-        Head.h)
+        Head.h
+        GlobalState.cpp
+        GlobalState.h)
 
 # Link to the actual SDL3 library.
 target_link_libraries(snake PRIVATE SDL3::SDL3)
