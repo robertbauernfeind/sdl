@@ -9,7 +9,7 @@
 void Head::draw() const {
     SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
 
-    const SDL_FRect head = { (float)x, (float)y, 50, 50 };
+    const SDL_FRect head = {(float) x, (float) y, 50, 50};
     SDL_RenderFillRect(gState.renderer, &head);
 }
 
@@ -19,20 +19,41 @@ void Head::changeDirection(const Direction dir) {
 
 void Head::move() {
     const int step = 50;
+    int newX = x;
+    int newY = y;
     switch (direction) {
         case Direction::UP:
-            y -= step;
+            newY = y - step;
+
+            if (newY < 0) {
+                newY = gState.height - step;
+            }
             break;
         case Direction::DOWN:
-            y += step;
+            newY = y + step;
+
+            if (newY > gState.height - step) {
+                newY = 0;
+            }
             break;
         case Direction::LEFT:
-            x -= step;
+            newX = x - step;
+
+            if (newX < 0) {
+                newX = gState.width - step;
+            }
             break;
         case Direction::RIGHT:
-            x += step;
+            newX = x + step;
+
+            if (newX > gState.width - step) {
+                newX = 0;
+            }
             break;
         default:
             break;
     }
+
+    y = newY;
+    x = newX;
 }
