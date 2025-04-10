@@ -88,6 +88,15 @@ int main() {
                             break;
                     }
                     break;
+                case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                    switch (event.button.button) {
+                        case SDL_BUTTON_LEFT:
+                            snake.addTail();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
                 default:
                     break;
             }

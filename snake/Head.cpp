@@ -11,6 +11,10 @@ void Head::draw() const {
 
     const SDL_FRect head = {(float) x, (float) y, 50, 50};
     SDL_RenderFillRect(gState.renderer, &head);
+
+    for (const auto tail: tails) {
+        tail.draw();
+    }
 }
 
 void Head::changeDirection(const Direction dir) {
@@ -54,6 +58,68 @@ void Head::move() {
             break;
     }
 
+    for (size_t i = 0; i < tails.size(); ++i) {
+        if (i == 0) {
+            tails[i].move(x, y);
+            tails[i].setDirection(direction);
+        } else {
+            const Tail lastTail = tails[i - 1];
+            tails[i].move(lastTail.getX(), lastTail.getY());
+            tails[i].setDirection(lastTail.getDirection());
+        }
+    }
+
     y = newY;
     x = newX;
+}
+
+void Head::addTail() {
+    const int step = 50;
+    Tail newTail;
+    if (tails.empty()) {
+        switch (direction) {
+            case Direction::UP:
+                newTail = Tail(x, y + step);
+                break;
+            case Direction::DOWN:
+                newTail = Tail(x, y - step);
+                break;
+            case Direction::LEFT:
+                newTail = Tail(x + step, y);
+                break;
+            case Direction::RIGHT:
+                newTail = Tail(x - step, y);
+                break;
+            default:
+                break;
+        }
+    } else {
+        const Tail lastTail = tails.back();
+        int newX = 0, newY = 0;
+
+        switch (lastTail.getDirection()) {
+            case Direction::UP:
+                newX = lastTail.getX();
+                newY = lastTail.getY() + step;
+                break;
+            case Direction::DOWN:
+                newX = lastTail.getX();
+                newY = lastTail.getY() - step;
+                break;
+            case Direction::LEFT:
+                newX = lastTail.getX() + step;
+                newY = lastTail.getY();
+                break;
+            case Direction::RIGHT:
+                newX = lastTail.getX() - step;
+                newY = lastTail.getY();
+                break;
+            default:
+                break;
+        }
+
+        newTail = Tail{newX, newY};
+    }
+
+    tails.push_back(newTail);
 }

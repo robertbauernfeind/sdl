@@ -14,7 +14,10 @@ add_executable(snake main.cpp
         Head.cpp
         Head.h
         GlobalState.cpp
-        GlobalState.h)
+        GlobalState.h
+        Tail.cpp
+        Tail.h
+        Direction.h)
 
 # Link to the actual SDL3 library.
 target_link_libraries(snake PRIVATE SDL3::SDL3)
