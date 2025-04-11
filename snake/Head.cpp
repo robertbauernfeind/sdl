@@ -9,7 +9,16 @@
 void Head::draw() const {
     SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
 
-    const SDL_FRect head = {(float) x, (float) y, 50, 50};
+    float offset = (float)gState.baseStep - (float)gState.headSize;
+    if (offset < 0) {
+        offset = 0;
+    }
+
+    const SDL_FRect head = {
+        (float) x + (offset / 2.0f),
+        (float) y - (offset / 2.0f),
+        (float)gState.headSize,
+        (float)gState.headSize};
     SDL_RenderFillRect(gState.renderer, &head);
 
     for (const auto tail: tails) {
@@ -22,7 +31,7 @@ void Head::changeDirection(const Direction dir) {
 }
 
 void Head::move() {
-    const int step = 50;
+    const int step = gState.baseStep;
     int newX = x;
     int newY = y;
     switch (direction) {
@@ -75,7 +84,7 @@ void Head::move() {
 }
 
 void Head::addTail() {
-    const int step = 50;
+    const int step = gState.baseStep;
     Tail newTail;
     if (tails.empty()) {
         switch (direction) {

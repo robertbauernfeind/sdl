@@ -13,6 +13,10 @@ struct GlobalState {
     SDL_Renderer *renderer;
     int width = 800;
     int height = 800;
+
+    int baseStep = 50;
+    int headSize = 40;
+    int tailSize = 40;
 };
 
 extern GlobalState gState;

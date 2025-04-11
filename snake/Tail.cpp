@@ -9,7 +9,17 @@
 void Tail::draw() const {
     SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
 
-    const SDL_FRect tail = {(float) x, (float) y, 50, 50};
+    float offset = (float)gState.baseStep - (float)gState.tailSize;
+    if (offset < 0) {
+        offset = 0;
+    }
+
+    const SDL_FRect tail = {
+        (float) x + (offset / 2.0f),
+        (float) y - (offset / 2.0f),
+        (float)gState.tailSize,
+        (float)gState.tailSize};
+
     SDL_RenderFillRect(gState.renderer, &tail);
 }
 
