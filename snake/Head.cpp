@@ -58,14 +58,15 @@ void Head::move() {
             break;
     }
 
-    for (size_t i = 0; i < tails.size(); ++i) {
-        if (i == 0) {
-            tails[i].move(x, y);
-            tails[i].setDirection(direction);
+    for (size_t i = 0; i < tails.size(); i++) {
+        const size_t revIdx = tails.size() - 1 - i;
+        if (revIdx == 0) {
+            tails[revIdx].move(x, y);
+            tails[revIdx].setDirection(direction);
         } else {
-            const Tail lastTail = tails[i - 1];
-            tails[i].move(lastTail.getX(), lastTail.getY());
-            tails[i].setDirection(lastTail.getDirection());
+            const Tail lastTail = tails[revIdx - 1];
+            tails[revIdx].move(lastTail.getX(), lastTail.getY());
+            tails[revIdx].setDirection(lastTail.getDirection());
         }
     }
 

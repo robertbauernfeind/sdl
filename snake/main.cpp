@@ -110,7 +110,7 @@ int main() {
         accumulator += deltaTime;
 
         // do logic here
-        drawGrid();
+        // drawGrid();
 
         // move
         while (accumulator >= fixedTimeStep) {
