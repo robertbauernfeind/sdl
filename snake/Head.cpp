@@ -8,6 +8,16 @@
 
 #include "GlobalState.h"
 
+bool Head::collidesWithTail() const {
+    for (const auto &tail : tails) {
+        if (tail.getX() == x && tail.getY() == y) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Head::draw() const {
     for (const auto tail: tails) {
         tail.draw();

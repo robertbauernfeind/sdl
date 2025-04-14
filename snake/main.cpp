@@ -46,6 +46,12 @@ void spawnApple() {
         }
     }
 
+    for (const auto &tail : gState.snake.getTails()) {
+        if (tail.getX() == x && tail.getY() == y) {
+            return; // Apple is on the snake
+        }
+    }
+
     const Apple apple(x, y);
     gState.apples.push_back(apple);
 }
@@ -54,6 +60,8 @@ void initGame() {
     for (int i = 0; i < 2; i++) {
         spawnApple();
     }
+
+    gState.snake = Head{};
 }
 
 int main() {
@@ -86,7 +94,6 @@ int main() {
     float accumulator = 0.0f;
     const float fixedTimeStep = 0.25f; // 100ms Update-Intervall
 
-    auto snake = Head();
     initGame();
 
     while (!done) {
@@ -99,16 +106,16 @@ int main() {
                 case SDL_EVENT_KEY_DOWN:
                     switch (event.key.key) {
                         case SDLK_UP:
-                            snake.changeDirection(Direction::UP);
+                            gState.snake.changeDirection(Direction::UP);
                             break;
                         case SDLK_DOWN:
-                            snake.changeDirection(Direction::DOWN);
+                            gState.snake.changeDirection(Direction::DOWN);
                             break;
                         case SDLK_LEFT:
-                            snake.changeDirection(Direction::LEFT);
+                            gState.snake.changeDirection(Direction::LEFT);
                             break;
                         case SDLK_RIGHT:
-                            snake.changeDirection(Direction::RIGHT);
+                            gState.snake.changeDirection(Direction::RIGHT);
                             break;
                         default:
                             break;
@@ -120,7 +127,7 @@ int main() {
                             spawnApple();
                             break;
                         case SDL_BUTTON_RIGHT:
-                            snake.addTail();
+                            gState.snake.addTail();
                             break;
                         default:
                             break;
@@ -143,7 +150,7 @@ int main() {
 
         // move
         while (accumulator >= fixedTimeStep) {
-            snake.move();
+            gState.snake.move();
             accumulator -= fixedTimeStep;
         }
 
@@ -151,11 +158,16 @@ int main() {
             apple.draw();
         }
 
-        if (snake.collidesWithApple()) {
+        if (gState.snake.collidesWithApple()) {
             spawnApple();
         }
 
-        snake.draw();
+        if (gState.snake.collidesWithTail()) {
+            SDL_Log("Game Over");
+            done = true;
+        }
+
+        gState.snake.draw();
 
         SDL_RenderPresent(gState.renderer);
     }

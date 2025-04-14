@@ -18,12 +18,16 @@ private:
     SDL_Color color = { 255, 255, 0, 255 };
     std::vector<Tail> tails;
 
+
 public:
     void draw() const;
     void changeDirection(Direction dir);
     void move();
     void addTail();
     bool collidesWithApple();
+    bool collidesWithTail() const;
+
+    std::vector<Tail> getTails() const { return tails; }
 };
 
 
