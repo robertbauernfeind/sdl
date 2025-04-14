@@ -30,6 +30,12 @@ void Head::draw() const {
 }
 
 void Head::changeDirection(const Direction dir) {
+    if ((dir == Direction::UP && direction == Direction::DOWN) ||
+        (dir == Direction::LEFT && direction == Direction::RIGHT) ||
+        (dir == Direction::RIGHT && direction == Direction::LEFT) ||
+        (dir == Direction::DOWN && direction == Direction::UP)) {
+        return;
+    }
     direction = dir;
 }
 
