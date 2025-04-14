@@ -17,6 +17,8 @@ public:
     Apple(const int x, const int y): x(x), y(y) {}
 
     void draw() const;
+    int getX() const { return x; }
+    int getY() const { return y; }
 };
 
 

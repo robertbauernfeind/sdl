@@ -35,12 +35,25 @@ void drawGrid() {
 void spawnApple() {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution distr{0, gState.width / gState.baseStep};
-    int x = distr(gen) * 50;
-    int y = distr(gen) * 50;
+    uniform_int_distribution distr{0, (gState.width / gState.baseStep) - 1};
+    const int x = distr(gen) * 50;
+    const int y = distr(gen) * 50;
 
-    Apple apple(x, y);
+
+    for (const auto &existingApple: gState.apples) {
+        if (existingApple.getX() == x && existingApple.getY() == y) {
+            return; // Apple already exists at this position
+        }
+    }
+
+    const Apple apple(x, y);
     gState.apples.push_back(apple);
+}
+
+void initGame() {
+    for (int i = 0; i < 2; i++) {
+        spawnApple();
+    }
 }
 
 int main() {
@@ -74,6 +87,7 @@ int main() {
     const float fixedTimeStep = 0.25f; // 100ms Update-Intervall
 
     auto snake = Head();
+    initGame();
 
     while (!done) {
         SDL_Event event;
@@ -135,6 +149,10 @@ int main() {
 
         for (const auto &apple: gState.apples) {
             apple.draw();
+        }
+
+        if (snake.collidesWithApple()) {
+            spawnApple();
         }
 
         snake.draw();

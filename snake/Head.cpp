@@ -4,6 +4,8 @@
 
 #include "Head.h"
 
+#include <bits/algorithmfwd.h>
+
 #include "GlobalState.h"
 
 void Head::draw() const {
@@ -13,7 +15,7 @@ void Head::draw() const {
 
     SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
 
-    float offset = (float)gState.baseStep - (float)gState.headSize;
+    float offset = (float) gState.baseStep - (float) gState.headSize;
     if (offset < 0) {
         offset = 0;
     }
@@ -21,10 +23,10 @@ void Head::draw() const {
     const SDL_FRect head = {
         (float) x + (offset / 2.0f),
         (float) y + (offset / 2.0f),
-        (float)gState.headSize,
-        (float)gState.headSize};
+        (float) gState.headSize,
+        (float) gState.headSize
+    };
     SDL_RenderFillRect(gState.renderer, &head);
-
 }
 
 void Head::changeDirection(const Direction dir) {
@@ -133,4 +135,35 @@ void Head::addTail() {
     }
 
     tails.push_back(newTail);
+}
+
+bool Head::collidesWithApple() {
+    SDL_FRect head = {
+        (float) x,
+        (float) y,
+        (float) gState.headSize,
+        (float) gState.headSize
+    };
+
+    for (int i = 0; i < gState.apples.size(); i++) {
+        SDL_FRect apple = {
+            (float) gState.apples[i].getX(),
+            (float) gState.apples[i].getY(),
+            (float) gState.appleSize,
+            (float) gState.appleSize
+        };
+
+        const bool colliding = SDL_HasRectIntersectionFloat(
+            &apple, &head
+        );
+
+        if (colliding) {
+            gState.apples.erase(gState.apples.begin() + i);
+            addTail();
+
+            return colliding;
+        }
+    }
+
+    return false;
 }

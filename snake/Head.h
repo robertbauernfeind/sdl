@@ -23,6 +23,7 @@ public:
     void changeDirection(Direction dir);
     void move();
     void addTail();
+    bool collidesWithApple();
 };
 
 
