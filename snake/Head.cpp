@@ -7,6 +7,10 @@
 #include "GlobalState.h"
 
 void Head::draw() const {
+    for (const auto tail: tails) {
+        tail.draw();
+    }
+
     SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
 
     float offset = (float)gState.baseStep - (float)gState.headSize;
@@ -16,14 +20,11 @@ void Head::draw() const {
 
     const SDL_FRect head = {
         (float) x + (offset / 2.0f),
-        (float) y - (offset / 2.0f),
+        (float) y + (offset / 2.0f),
         (float)gState.headSize,
         (float)gState.headSize};
     SDL_RenderFillRect(gState.renderer, &head);
 
-    for (const auto tail: tails) {
-        tail.draw();
-    }
 }
 
 void Head::changeDirection(const Direction dir) {

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 
 #include "Head.h"
 #include "SDL3/SDL.h"
@@ -29,6 +30,17 @@ void drawGrid() {
             static_cast<float>(i)
         );
     }
+}
+
+void spawnApple() {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution distr{0, gState.width / gState.baseStep};
+    int x = distr(gen) * 50;
+    int y = distr(gen) * 50;
+
+    Apple apple(x, y);
+    gState.apples.push_back(apple);
 }
 
 int main() {
@@ -91,6 +103,9 @@ int main() {
                 case SDL_EVENT_MOUSE_BUTTON_DOWN:
                     switch (event.button.button) {
                         case SDL_BUTTON_LEFT:
+                            spawnApple();
+                            break;
+                        case SDL_BUTTON_RIGHT:
                             snake.addTail();
                             break;
                         default:
@@ -118,7 +133,12 @@ int main() {
             accumulator -= fixedTimeStep;
         }
 
+        for (const auto &apple: gState.apples) {
+            apple.draw();
+        }
+
         snake.draw();
+
         SDL_RenderPresent(gState.renderer);
     }
 

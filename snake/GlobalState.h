@@ -4,8 +4,11 @@
 
 #ifndef GLOBALSTATE_H
 #define GLOBALSTATE_H
+#include <vector>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
+
+#include "Apple.h"
 
 
 struct GlobalState {
@@ -17,6 +20,9 @@ struct GlobalState {
     int baseStep = 50;
     int headSize = 40;
     int tailSize = 40;
+    int appleSize = 40;
+
+    std::vector<Apple> apples;
 };
 
 extern GlobalState gState;

@@ -16,7 +16,7 @@ void Tail::draw() const {
 
     const SDL_FRect tail = {
         (float) x + (offset / 2.0f),
-        (float) y - (offset / 2.0f),
+        (float) y + (offset / 2.0f),
         (float)gState.tailSize,
         (float)gState.tailSize};
 
