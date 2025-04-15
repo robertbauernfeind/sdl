@@ -10,7 +10,7 @@ using namespace std;
 void drawGrid() {
     SDL_SetRenderDrawColor(gState.renderer, 255, 255, 255, 255);
     constexpr int offsetX = 0;
-    const int offsetY = 0;
+    constexpr int offsetY = 0;
     for (int i = (offsetY / 2); i <= gState.height - (offsetY / 2); i += 50) {
         SDL_RenderLine(
             gState.renderer,
@@ -92,7 +92,7 @@ int main() {
     Uint64 lastTime = SDL_GetTicks();
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Starting main loop");
     float accumulator = 0.0f;
-    const float fixedTimeStep = 0.25f; // 100ms Update-Intervall
+    constexpr float fixedTimeStep = 0.250f; // 250ms Update-Intervall
 
     initGame();
 

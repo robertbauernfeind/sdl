@@ -25,16 +25,16 @@ void Head::draw() const {
 
     SDL_SetRenderDrawColor(gState.renderer, color.r, color.g, color.b, color.a);
 
-    float offset = (float) gState.baseStep - (float) gState.headSize;
+    float offset = static_cast<float>(gState.baseStep) - static_cast<float>(gState.headSize);
     if (offset < 0) {
         offset = 0;
     }
 
     const SDL_FRect head = {
-        (float) x + (offset / 2.0f),
-        (float) y + (offset / 2.0f),
-        (float) gState.headSize,
-        (float) gState.headSize
+        static_cast<float>(x) + (offset / 2.0f),
+        static_cast<float>(y) + (offset / 2.0f),
+        static_cast<float>(gState.headSize),
+        static_cast<float>(gState.headSize)
     };
     SDL_RenderFillRect(gState.renderer, &head);
 }
@@ -154,30 +154,12 @@ void Head::addTail() {
 }
 
 bool Head::collidesWithApple() {
-    SDL_FRect head = {
-        (float) x,
-        (float) y,
-        (float) gState.headSize,
-        (float) gState.headSize
-    };
-
     for (int i = 0; i < gState.apples.size(); i++) {
-        SDL_FRect apple = {
-            (float) gState.apples[i].getX(),
-            (float) gState.apples[i].getY(),
-            (float) gState.appleSize,
-            (float) gState.appleSize
-        };
-
-        const bool colliding = SDL_HasRectIntersectionFloat(
-            &apple, &head
-        );
-
-        if (colliding) {
+        if (x == gState.apples[i].getX() && y == gState.apples[i].getY()) {
             gState.apples.erase(gState.apples.begin() + i);
             addTail();
 
-            return colliding;
+            return true;
         }
     }
 
