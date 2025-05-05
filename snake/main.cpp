@@ -1,8 +1,10 @@
+#include <filesystem>
 #include <iostream>
 #include <random>
+#include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include "Head.h"
-#include "SDL3/SDL.h"
 #include "GlobalState.h"
 
 using namespace std;
@@ -46,7 +48,7 @@ void spawnApple() {
         }
     }
 
-    for (const auto &tail : gState.snake.getTails()) {
+    for (const auto &tail: gState.snake.getTails()) {
         if (tail.getX() == x && tail.getY() == y) {
             return; // Apple is on the snake
         }
@@ -64,6 +66,7 @@ void initGame() {
     gState.snake = Head{};
 }
 
+
 int main() {
     SDL_Log("%s", "Snake startup");
 
@@ -72,6 +75,11 @@ int main() {
         return 1;
     }
 
+    if (!TTF_Init()) {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "TTF_Init:\n");
+        SDL_Quit();
+        return 1;
+    }
     bool done = false;
 
     if (!SDL_CreateWindowAndRenderer(
@@ -87,6 +95,17 @@ int main() {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window: %s", SDL_GetError());
             return 1;
         }
+
+    filesystem::directory_iterator dir("../ressources");
+    for (const auto &entry : dir) {
+        cout << entry.path() << endl;
+    }
+
+    TTF_Font *font = TTF_OpenFont("../ressources/arial.ttf", 24); // Pfad zu deiner .ttf Datei
+    if (!font) {
+        std::cerr << "Failed to load font" << std::endl;
+        return 1;
+    }
 
 
     Uint64 lastTime = SDL_GetTicks();
@@ -139,6 +158,13 @@ int main() {
         }
         SDL_SetRenderDrawColor(gState.renderer, 0, 0, 0, 255);
         SDL_RenderClear(gState.renderer);
+
+        SDL_Color textColor = {255, 255, 255, 255};
+        string text = "Hello SDL3!";
+        SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), text.length(), textColor);
+        SDL_Texture* msg = SDL_CreateTextureFromSurface(gState.renderer, textSurface);
+        SDL_FRect msgRect {0,0, 500, 100};
+        SDL_RenderTexture(gState.renderer, msg, nullptr, &msgRect);
 
         Uint64 currentTime = SDL_GetTicks();
         float deltaTime = (currentTime - lastTime) / 1000.0f;

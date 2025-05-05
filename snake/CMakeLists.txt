@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.30)
 project(snake)
 
 set(CMAKE_CXX_STANDARD 20)
-# set the output directory for built objects.
-# This makes sure that the dynamic library goes into the build directory automatically.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
-# This assumes the SDL source is available in vendored/SDL
+# Unterordner mit den SDL3\-Quellen
 add_subdirectory(vendor/SDL3 EXCLUDE_FROM_ALL)
+add_subdirectory(vendor/SDL_ttf EXCLUDE_FROM_ALL)
+file(COPY ${CMAKE_SOURCE_DIR}/ressources DESTINATION ${CMAKE_BINARY_DIR})
 
 add_executable(snake main.cpp
         Head.cpp
@@ -21,5 +21,5 @@ add_executable(snake main.cpp
         Apple.cpp
         Apple.h)
 
-# Link to the actual SDL3 library.
-target_link_libraries(snake PRIVATE SDL3::SDL3)
+# Linke zu den SDL3 Bibliotheken
+target_link_libraries(snake PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf)
